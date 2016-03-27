@@ -151,6 +151,12 @@ void loop() {
             dimming-=5;
             old=dimming;
           }
+          else
+          {
+            dimming=45;
+            delay(50);
+            old=dimming=10;
+          }
           break;
         case'-':
          if(dimming<90)
