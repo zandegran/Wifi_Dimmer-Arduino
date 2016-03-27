@@ -101,56 +101,64 @@ void loop() {
 
         //We detect where the actual post data is in other words what the user entered
         //once we isolate it we can parse it and use it
-        if (c == '=')
-            {
+        int maxi=80;
+        switch (c) {
+          
+          case '=':
               //trim the fat of the soon to be recorded char so we only get the user entered message
               msgIsolator = 1;
+              break;
+          case'f':
+        
+            for (i=dimming;i<95;i++)
+            {
+              dimming=i;
+              delay(20);
             }
-        else if (c=='f')
-        {
-          for (i=dimming;i<95;i++)
+            break;
+        
+          case'n':
+            //old>80?80:old
+            maxi=old>80?80:old;
+            for (i=dimming;i>maxi;i--)
+            {
+              old=i;
+              dimming=i;
+              delay(20);
+            }
+            break;
+          case'c':               // Cinematic off
+           
+              for (i=dimming;i<95;i++)
+              {
+                dimming=i;
+                delay(50);
+              }
+              break;
+          case'v':
+         
+            maxi=old>80?80:old;
+            for (i=dimming;i>maxi;i--)
+            {
+              old=i;
+              dimming=i;
+              delay(50);
+            }
+            break;
+         case '+':
+          if (dimming>10)
           {
-            dimming=i;
-            delay(20);
+            dimming-=5;
+            old=dimming;
           }
-        }
-        else if (c=='n')
-        {
-          //old>80?80:old
-          int maxi=old>80?80:old;
-          for (i=dimming;i>maxi;i--)
+          break;
+        case'-':
+         if(dimming<90)
           {
-            old=i;
-            dimming=i;
-            delay(20);
+            dimming+=5;
+            old=dimming;
           }
-        }
-        else if (c=='c')               // Cinematic off
-        {
-          for (i=dimming;i<95;i++)
-          {
-            dimming=i;
-            delay(50);
-          }
-        }
-        else if (c=='v')
-        {
-          int maxi=old>80?80:old;
-          for (i=dimming;i>maxi;i--)
-          {
-            old=i;
-            dimming=i;
-            delay(50);
-          }
-        }else if (c=='+' && dimming>10)
-        {
-          dimming-=5;
-          old=dimming;
-        }
-        else if (c=='-' && dimming<90)
-        {
-          dimming+=5;
-          old=dimming;
+          break;
         }
       }
     }
