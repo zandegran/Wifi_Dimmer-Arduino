@@ -10,7 +10,7 @@ unsigned char AC_LOAD = 7;    // Output to Opto Triac pin
 unsigned char dimming = 3;  // Dimming level (0-100)
 unsigned char old = 3;
 unsigned char i;
-
+boolean cinematic = true;
 char msg[128];//variables for reading in the html responses
 int letterCount = 0; 
 void setup() {
@@ -127,23 +127,33 @@ void loop() {
               delay(20);
             }
             break;
-          case'c':               // Cinematic off
-           
+          case'v':               // Cinematic off
+             if(cinematic)
+             {
               for (i=dimming;i<95;i++)
               {
                 dimming=i;
                 delay(50);
               }
-              break;
-          case'v':
-         
-            maxi=old>80?80:old;
-            for (i=dimming;i>maxi;i--)
+             }
+             break;
+          case'b':
+            if(cinematic)
             {
-              old=i;
-              dimming=i;
-              delay(50);
+              maxi=old>80?80:old;
+              for (i=dimming;i>maxi;i--)
+              {
+                old=i;
+                dimming=i;
+                delay(50);
+              }
             }
+            break;
+          case'c':
+            cinematic=!cinematic;
+            dimming=dimming-15;
+            delay(50);
+            old=dimming=dimming+15;
             break;
          case '+':
           if (dimming>10)
