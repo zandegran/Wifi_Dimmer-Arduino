@@ -7,8 +7,11 @@ TCP Dimmer
 **Use ```KeySender.py``` to control brightness from PC.**
 
 `-` to decrease brightness.
+
 `+` to increase brightness.
+
 `n` to turn on and set to previous brightness.
+
 `f` to turn off.
 
 ![Product](https://bytebucket.org/zandegran/dimmer/raw/c2f1d2e5ca2b7d33449b440c9d3274ca7a8fd947/product.jpg)
