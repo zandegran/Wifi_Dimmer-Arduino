@@ -18,5 +18,7 @@ TCP Dimmer
 **Use other scripts to perform any single operation.**
 
 One use case could be mapping KODI (Open source media player) keymaps to do the operations on key press.
+
 [Modifying KODI Kymaps](http://kodi.wiki/view/HOW-TO:Modify_keymaps)
+
 Yes, I use my TV remote to control brightness.:smile:
