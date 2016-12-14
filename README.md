@@ -14,8 +14,16 @@ TCP Dimmer
 
 `f` to turn off.
 
-![Product](https://bytebucket.org/zandegran/dimmer/raw/c2f1d2e5ca2b7d33449b440c9d3274ca7a8fd947/product.jpg)
+![Product](https://bytebucket.org/zandegran/dimmer/raw/26d8c4f2f081138dcd83aab0eb40c9db9376e0d2/Images/Product.jpg)
 **Use other scripts to perform any single operation.**
+
+##### Schematics
+
+![Schematics](https://bytebucket.org/zandegran/dimmer/raw/aae1725d7131e86d6d03e55af1b10c8fadb5de5f/Images/Schematics.jpg)
+
+##### Wiring
+
+![Wiring](https://bytebucket.org/zandegran/dimmer/raw/aae1725d7131e86d6d03e55af1b10c8fadb5de5f/Images/Wiring.jpg)
 
 One use case could be mapping KODI (Open source media player) keymaps to do the operations on key press.
 
