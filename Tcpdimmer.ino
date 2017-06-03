@@ -3,12 +3,14 @@ char foo;
 #include <WiFly.h>
 #include <stdio.h>
 #include "Credentials.h"
-
+#include <EEPROM.h>
 WiFlyServer server(80);
 
 unsigned char AC_LOAD = 7;    // Output to Opto Triac pin
-unsigned char dimming = 3;  // Dimming level (0-100)
+unsigned char dimming = 65;  // Dimming level (0-100)
 unsigned char old = 3;
+int dimmingAddress = 0;
+boolean cinematicAddress = 10;
 unsigned char i;
 boolean cinematic = true;
 char msg[128];//variables for reading in the html responses
@@ -27,9 +29,12 @@ void setup() {
   Serial.begin(9600);  //Serial communication at 9600 buad for debugging 
   Serial.print("IP: ");
   Serial.println(WiFly.ip());  //Prints IP address once associated with the network
-  dimming=70;     //If DHCP is on, this IP can change. If static IP is set, it should not.
-  delay(50);
-  dimming=5;
+  dimming=60;     //If DHCP is on, this IP can change. If static IP is set, it should not.
+  delay(50); 
+  dimming=EEPROM.read(dimmingAddress);
+  cinematic=EEPROM.read(cinematicAddress);
+  Serial.println(dimming);
+  Serial.println(cinematic);
   server.begin(); //initialize the server
 
 }
@@ -98,9 +103,6 @@ void loop() {
 
         //if you want to see all data comming in and going out uncomment the line below
         //Serial.print(c);
-
-        //We detect where the actual post data is in other words what the user entered
-        //once we isolate it we can parse it and use it
         int maxi=80;
         switch (c) {
           
@@ -108,8 +110,7 @@ void loop() {
               //trim the fat of the soon to be recorded char so we only get the user entered message
               msgIsolator = 1;
               break;
-          case'f':
-        
+          case'f':                    // off fast
             for (i=dimming;i<95;i++)
             {
               dimming=i;
@@ -117,7 +118,7 @@ void loop() {
             }
             break;
         
-          case'n':
+          case'n':                    // on fast
             //old>80?80:old
             maxi=old>80?80:old;
             for (i=dimming;i>maxi;i--)
@@ -127,7 +128,7 @@ void loop() {
               delay(20);
             }
             break;
-          case'v':               // Cinematic off
+          case'v':                 // off slow 
              if(cinematic)
              {
               for (i=dimming;i<95;i++)
@@ -137,7 +138,7 @@ void loop() {
               }
              }
              break;
-          case'b':
+          case'b':                    // on slow
             if(cinematic)
             {
               maxi=old>80?80:old;
@@ -149,19 +150,27 @@ void loop() {
               }
             }
             break;
-          case'c':
+          case'c':                 // Cinematic Toggle
             cinematic=!cinematic;
+            EEPROM.write(cinematicAddress, cinematic);
             dimming=dimming-15;
             delay(50);
             old=dimming=dimming+15;
+            break;
+         case'r':                 // reset saved values
+            dimming = 50;
+            cinematic = true;
+            EEPROM.write(dimmingAddress, dimming);
+            EEPROM.write(cinematicAddress, cinematic);
             break;
          case '+':
           if (dimming>10)
           {
             dimming-=5;
             old=dimming;
+            EEPROM.write(dimmingAddress, dimming);
           }
-          else
+          else                      // blink, if reached the full brightness
           {
             dimming=45;
             delay(50);
@@ -173,20 +182,22 @@ void loop() {
           {
             dimming+=5;
             old=dimming;
+            EEPROM.write(dimmingAddress, dimming);
           }
           break;
         }
       }
     }
 
-  // give the web browser time to receive the data
-  //delay(1000);//delay is very important 
   client.flush();
   //client.stop();
   }
                  
 
 }
+
+
+
 
 
 

@@ -25,8 +25,9 @@ TCP Dimmer
 
 ![Wiring](https://bytebucket.org/zandegran/dimmer/raw/aae1725d7131e86d6d03e55af1b10c8fadb5de5f/Images/Wiring.jpg)
 
-One use case could be mapping KODI (Open source media player) keymaps to do the operations on key press.
+One use case could be mapping KODI (Open source media player) keymaps to do the operations on key press. Call the controller scripts on keypress. 
 
 [Modifying KODI Kymaps](http://kodi.wiki/view/HOW-TO:Modify_keymaps)
 
 Yes, I use my TV remote to control brightness.:smile:
+Also you can turn on the lights when a video is stopped or paused and turn off when played or resumed. I used Kodi Callbacks to do this.
