@@ -1,4 +1,6 @@
 ![License](https://img.shields.io/dub/l/vibe-d.svg)
+
+
 TCP Dimmer
 ==========
 
@@ -31,4 +33,4 @@ One use case could be mapping KODI (Open source media player) keymaps to do the 
 [Modifying KODI Kymaps](http://kodi.wiki/view/HOW-TO:Modify_keymaps)
 
 **Yes, I use my TV remote to control brightness.:smile:
-Also you can turn on the lights when a video is stopped or paused and turn off when played or resumed. I used 'Kodi Callbacks' plugin to do this.**
+Also, you can turn on the lights when a video is stopped or paused and turn off when played or resumed. I used 'Kodi Callbacks' plugin to do this.**

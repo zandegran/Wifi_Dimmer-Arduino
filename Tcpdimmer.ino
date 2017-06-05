@@ -13,7 +13,7 @@ int dimmingAddress = 0;
 boolean cinematicAddress = 10;
 unsigned char i;
 boolean cinematic = true;
-char msg[128];//variables for reading in the html responses
+char msg[128];
 int letterCount = 0; 
 void setup() {
   // put your setup code here, to run once:
@@ -55,14 +55,14 @@ void zero_crosss_int()  // function to be fired at the zero crossing to dim the 
 
 
 void loop() {
-    WiFlyClient client = server.available();
+  WiFlyClient client = server.available();
       
   int msgIsolator = 0;
 
   //int inChar; //variable for reading in data from the phone/browser 
   //boolean isParsing = false;// flag for reading in and parsing data 
            
-    if (client) {
+  if (client) {
     char c;
 
     while (client.connected()) 
@@ -103,7 +103,6 @@ void loop() {
 
         //if you want to see all data comming in and going out uncomment the line below
         //Serial.print(c);
-        int maxi=80;
         switch (c) {
           
           case '=':
@@ -111,93 +110,96 @@ void loop() {
               msgIsolator = 1;
               break;
           case'f':                    // off fast
-            for (i=dimming;i<95;i++)
-            {
-              dimming=i;
-              delay(20);
-            }
+            turnOff(20);
             break;
-        
           case'n':                    // on fast
-            //old>80?80:old
-            maxi=old>80?80:old;
-            for (i=dimming;i>maxi;i--)
-            {
-              old=i;
-              dimming=i;
-              delay(20);
-            }
+            turnOn(20);
             break;
-          case'v':                 // off slow 
-             if(cinematic)
-             {
-              for (i=dimming;i<95;i++)
-              {
-                dimming=i;
-                delay(50);
-              }
-             }
+          case'v':                    // off slow 
+            if(cinematic) {
+             turnOff(50);
+            }
              break;
           case'b':                    // on slow
-            if(cinematic)
-            {
-              maxi=old>80?80:old;
-              for (i=dimming;i>maxi;i--)
-              {
-                old=i;
-                dimming=i;
-                delay(50);
-              }
+            if(cinematic) {
+              turnOn(50);
             }
             break;
-          case'c':                 // Cinematic Toggle
+          case'c':                    // Cinematic Toggle  (disables keypresses v and b)
             cinematic=!cinematic;
             EEPROM.write(cinematicAddress, cinematic);
             dimming=dimming-15;
             delay(50);
             old=dimming=dimming+15;
             break;
-         case'r':                 // reset saved values
-            dimming = 50;
-            cinematic = true;
-            EEPROM.write(dimmingAddress, dimming);
-            EEPROM.write(cinematicAddress, cinematic);
+         case'r':                     // reset saved values
+            resetValues();
             break;
          case '+':
-          if (dimming>10)
-          {
-            dimming-=5;
-            old=dimming;
-            EEPROM.write(dimmingAddress, dimming);
-          }
-          else                      // blink, if reached the full brightness
-          {
-            dimming=45;
-            delay(50);
-            old=dimming=10;
-          }
-          break;
+           increaseBrightness(5);
+           break;
         case'-':
-         if(dimming<90)
-          {
-            dimming+=5;
-            old=dimming;
-            EEPROM.write(dimmingAddress, dimming);
-          }
-          break;
+           reduceBrightness(5);
+           break;
         }
       }
     }
 
-  client.flush();
-  //client.stop();
+    client.flush();
+    //client.stop();
   }
                  
 
 }
 
+void turnOn (int delayTime) {
+  
+        int maxi=80;
+  maxi=old>80?80:old;
+  for (i=dimming;i>maxi;i--)
+  {
+    old=i;
+    dimming=i;
+    delay(delayTime);
+  }
+}
+void turnOff (int delayTime) {
+    for (i=dimming;i<95;i++)
+    {
+      dimming=i;
+      delay(delayTime);
+    }
+   
+}
+void resetValues() {
+  dimming = 50;
+  cinematic = true;
+  EEPROM.write(dimmingAddress, dimming);
+  EEPROM.write(cinematicAddress, cinematic);
+}
 
-
+void reduceBrightness(int amount) {
+  if(dimming<90)
+  {
+    dimming+=amount;
+    old=dimming;
+    EEPROM.write(dimmingAddress, dimming);
+  }
+}
+void increaseBrightness(int amount) {
+  if (dimming>10)
+  {
+    dimming-=amount;
+    old=dimming;
+    EEPROM.write(dimmingAddress, dimming);
+  }
+  else                      // blink, if reached the full brightness
+  {
+    dimming=45;
+    delay(50);
+    old=dimming=10;
+  }
+}
 
 
 
@@ -213,7 +215,6 @@ char recordMessage (char incomingMsg)
 }
 ///////////////////////////////////////////////////////////////////////
 void checkAction() 
-// the first two or three letters of each message are read to determine which button was clicked on the webage
 { 
   //Serial.print("CA ");
   //Serial.print(msg);
